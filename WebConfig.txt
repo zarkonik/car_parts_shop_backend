@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <customErrors mode="Off"/>
+        <compilation debug="true"/>
+      <handlers>
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore processPath=".\Library.exe" stdoutLogEnabled="false" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" hostingModel="OutOfProcess" >
+ <environmentVariables>
+        <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Development" />
+      </environmentVariables>
+  </aspNetCore>
+    </system.webServer>
+<configuration> 
+</configuration>
+  </location>
+</configuration>
+<!--ProjectGuid: 12682976-b9c8-4ea2-857f-aed5cc047c78-->

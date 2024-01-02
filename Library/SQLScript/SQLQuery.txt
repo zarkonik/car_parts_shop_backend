@@ -1,0 +1,248 @@
+CREATE TABLE [dbo].[User](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Email] [nvarchar](100) NOT NULL,
+	[Password] [nvarchar](100) NULL,
+	[ConfirmPassword] [nvarchar](100) NULL,
+	[Firstname] [nvarchar](100) NOT NULL,
+	[Lastname] [nvarchar](100) NOT NULL,
+	[Active] [int] NOT NULL,
+	[Code] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK__User__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
+SET IDENTITY_INSERT [dbo].[User] ON 
+GO
+CREATE TABLE [dbo].[Vehicle](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Brand] [nvarchar](100)  NULL,
+	[Model] [nvarchar](100) NULL,
+	[Series] [nvarchar](100) NULL,
+	[Type] [nvarchar](100)  NULL,
+	[Picture] [nvarchar](MAX)  NULL,
+	[PictureModel] [nvarchar](MAX)  NULL,
+	[DateOf] [date] null,
+	[DateUntil] [date] null,
+	
+ CONSTRAINT [PK__Vehicle__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+) 
+GO
+CREATE TABLE [dbo].[Category](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100)  NULL,
+	[Picture] [nvarchar](MAX) NULL,
+	[Details] [nvarchar](MAX) NULL,
+ CONSTRAINT [PK__Category__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+) 
+GO
+CREATE TABLE [dbo].[CheckCategory](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	vehicle_id int NOT NULL,
+	category_id int NOT NULL,
+ CONSTRAINT [PK__CheckCategory__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (vehicle_id) REFERENCES Vehicle(Id) ON DELETE CASCADE,
+FOREIGN KEY (category_id) REFERENCES Category(Id) ON DELETE CASCADE,
+) 
+GO
+CREATE TABLE [dbo].[Product](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](MAX)  NULL,
+	[Picture] [nvarchar](MAX)  NULL,
+	[Quantity] [int] NOT NULL,
+	[Price] [int] NOT NULL,
+
+ CONSTRAINT [PK__Product__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+GO
+CREATE TABLE [dbo].[ProductInformation](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](MAX)  NULL,
+ 
+ CONSTRAINT [PK__ProductInformation__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+GO
+CREATE TABLE [dbo].[ProductInformationData](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Data] [nvarchar](MAX)  NULL,
+	productInformation_id int NOT NULL, 
+	product_id int NOT NULL, 
+ CONSTRAINT [PK__ProductInformationData__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (productInformation_id) REFERENCES ProductInformation(Id) ON DELETE CASCADE)
+GO
+CREATE TABLE [dbo].[LocatedProduct](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	category_id int NOT NULL,
+	product_id int NOT NULL,
+ CONSTRAINT [PK__LocatedProduct__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (category_id) REFERENCES Category(Id) ON DELETE CASCADE,
+FOREIGN KEY (product_id) REFERENCES Product(Id) ON DELETE CASCADE,
+) 
+GO
+CREATE TABLE [dbo].[ContainedProductInformation](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	productInformation_id int NOT NULL,
+	product_id int NOT NULL,
+ CONSTRAINT [PK__ContainedProductInformation__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (productInformation_id) REFERENCES ProductInformation(Id) ON DELETE CASCADE,
+FOREIGN KEY (product_id) REFERENCES Product(Id) ON DELETE CASCADE,
+) 
+
+GO
+CREATE TABLE [dbo].[SubCategory](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100)  NULL,
+	[Picture] [nvarchar](MAX) NULL,
+	[Details] [nvarchar](MAX) NULL,
+ CONSTRAINT [PK__SubCategory__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
+CREATE TABLE [dbo].[FindCategory](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	subCategory_id int NOT NULL,
+	category_id int NOT NULL,
+ CONSTRAINT [PK__FindCategory__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (subCategory_id) REFERENCES SubCategory(Id) ON DELETE CASCADE,
+FOREIGN KEY (category_id) REFERENCES Category(Id) ON DELETE CASCADE,
+) 
+GO
+CREATE TABLE [dbo].[ContainProduct](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	subCategory_id int NOT NULL,
+	product_id int NOT NULL,
+ CONSTRAINT [PK__ContainProduct__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (subCategory_id) REFERENCES SubCategory(Id) ON DELETE CASCADE,
+FOREIGN KEY (product_id) REFERENCES Product(Id) ON DELETE CASCADE,
+) 
+GO
+CREATE TABLE [dbo].[ResultCategory](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	vehicle_id int NOT NULL,
+	subCategory_id int NOT NULL,
+ CONSTRAINT [PK__ResultCategory__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (vehicle_id) REFERENCES Vehicle(Id) ON DELETE CASCADE,
+FOREIGN KEY (subCategory_id) REFERENCES SubCategory(Id) ON DELETE CASCADE,
+) 
+
+GO
+CREATE TABLE [dbo].[Group](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100)  NULL,
+	[Picture] [nvarchar](MAX) NULL,
+	[Details] [nvarchar](MAX) NULL,
+ CONSTRAINT [PK__Group__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
+CREATE TABLE [dbo].[BelongGroup](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	group_id int NOT NULL,
+	subCategory_id int NOT NULL,
+ CONSTRAINT [PK__BelongGroup__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (group_id) REFERENCES [Group](Id) ON DELETE CASCADE,
+FOREIGN KEY (subCategory_id) REFERENCES SubCategory(Id) ON DELETE CASCADE,
+) 
+GO
+CREATE TABLE [dbo].[BelongProduct](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	group_id int NOT NULL,
+	product_id int NOT NULL,
+ CONSTRAINT [PK__BelongProduct__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (group_id) REFERENCES [Group](Id) ON DELETE CASCADE,
+FOREIGN KEY (product_id) REFERENCES Product(Id) ON DELETE CASCADE,
+) 
+
+GO
+CREATE TABLE [dbo].[Engine](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Power] [nvarchar](100)  NULL,
+ CONSTRAINT [PK__Engine__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+GO
+CREATE TABLE [dbo].[ContainEngine](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	vehicle_id int NOT NULL,
+	engine_id int NOT NULL,
+ CONSTRAINT [PK__ContainEngine__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (vehicle_id) REFERENCES [Vehicle](Id) ON DELETE CASCADE,
+FOREIGN KEY (engine_id) REFERENCES Engine(Id) ON DELETE CASCADE,
+)
+GO 
+CREATE TABLE [dbo].[GroupInformation](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](MAX)  NULL,
+ CONSTRAINT [PK__GroupInformation__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+))
+GO
+CREATE TABLE [dbo].[GroupInformationData](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Data] [nvarchar](MAX)  NULL,
+	groupInformation_id int NOT NULL, 
+	group_id int NOT NULL, 
+ CONSTRAINT [PK__GroupInformationData__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (groupInformation_id) REFERENCES GroupInformation(Id) ON DELETE CASCADE)
+go 
+CREATE TABLE [dbo].[IProductContainIGroup](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	productInformation_id int NOT NULL,
+	groupInformation_id int NOT NULL,
+ CONSTRAINT [PK__IProductContainIGroup__3214EC077B0B6A86] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+),
+FOREIGN KEY (productInformation_id) REFERENCES ProductInformation(Id) ON DELETE CASCADE,
+FOREIGN KEY (groupInformation_id) REFERENCES GroupInformation(Id) ON DELETE CASCADE,
+) 
